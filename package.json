@@ -47,6 +47,7 @@
     "jwks-rsa": "^2.0.4",
     "knex": "^0.21.12",
     "pg": "^8.5.1",
+    "react-datepicker": "^4.3.0",
     "superagent": "^6.1.0"
   },
   "devDependencies": {

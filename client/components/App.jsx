@@ -2,11 +2,12 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { useAuth0 } from '@auth0/auth0-react'
 import { cacheUser } from '../auth0-utils'
+import { Route } from 'react-router'
 import Nav from './Nav'
 import PingRoutes from './PingRoutes'
 import Registeration from './Registeration'
 import Users from './Users'
-import { Route } from 'react-router'
+import Plants from './Plants'
 
 function App () {
   cacheUser(useAuth0)
@@ -14,6 +15,7 @@ function App () {
   return (
     <div className='app'>
       <Route exact path='/' component={Nav} />
+      <Route path='/' component={Plants} />
       <Route exact path='/' component={Users} />
       <Route exact path='/' component={PingRoutes} />
       <Route path='/register' component={Registeration} />

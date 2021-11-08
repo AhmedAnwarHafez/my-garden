@@ -10,10 +10,10 @@ import { Auth0Provider } from '@auth0/auth0-react'
 document.addEventListener('DOMContentLoaded', () => {
   render(
     <Auth0Provider
-      domain='gardenz.au.auth0.com'
-      clientId='UPX21QATLKQlu9iMNfWmZd24Y3Xk2ezF'
+      domain='dev-bm124pr5.us.auth0.com'
+      clientId='PTo8k3W9piK85EdgtSZNOuIpIr26g6CC'
       redirectUri={window.location.origin}
-      audience='https://fullstackboilerplate/api'
+      audience='https://my-garden/api'
     >
       <Provider store={store}>
         <Router>
