@@ -34,7 +34,6 @@ function Plant (props) {
       {/* <p onClick={handleClickDel} ><strong>X</strong></p> */}
       <button onClick={handleClickDelPlant}>X</button>
     </div>
-
   )
 }
 

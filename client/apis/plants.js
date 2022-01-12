@@ -34,3 +34,17 @@ export function deletePlant (id) {
       console.error('api: deletePlant has error', err.message)
     })
 }
+
+// export function addImage (selectedFile) {
+//   console.log(selectedFile)
+//   return request.post('/upload-profile-pic')
+//     // .send(selectedFile)
+//     .then(res => {
+//       console.log(res)
+//       console.log(res.req._data)
+//       return null
+//     })
+//     .catch(err => {
+//       console.error('api: addImage has error', err.message)
+//     })
+// }

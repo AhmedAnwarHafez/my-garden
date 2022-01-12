@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { addThePlant, fetchPlants } from '../actions/plants'
+import { addImage } from '../apis/plants'
 import Plant from './Plant'
 import WaitIndicator from './WaitIndicator'
+import axios from 'axios'
 
 // const auth0Id = '123'
 const auth0Id = '456'
@@ -24,6 +26,8 @@ function Plants (props) {
     }
   )
   const [load, setLoad] = useState(false)
+  const [fileState, setFileState] = useState({ selectedFile: null })
+  const [temp, setTemp] = useState('')
 
   function handleChangeAddPlant (e) {
     const { name, value } = e.target
@@ -31,7 +35,7 @@ function Plants (props) {
       ...addForm,
       [name]: value
     }
-    console.log(newAddForm)
+    // console.log(newAddForm)
     setAddForm(newAddForm)
   }
 
@@ -61,8 +65,38 @@ function Plants (props) {
     setLoad(!load)
   }
 
+  function onFileChange (e) {
+    setFileState({ selectedFile: e.target.files[0] })
+  }
+
+  function handleImageSubmit (e) {
+    // console.log(fileState.selectedFile)
+    // addImage(fileState.selectedFile)
+    // addImage()
+
+    e.preventDefault()
+    const formData = new FormData()
+    formData.append('profile_pic', fileState.selectedFile)
+    console.log(fileState.selectedFile)
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    }
+    axios.post('/upload-profile-pic', formData, config)
+      .then((response) => {
+        console.log(response)
+        setTemp(response.data)
+        // alert('The file is successfully uploaded')
+        return null
+      }).catch((err) => {
+        console.error(err.message)
+      })
+  }
+
   return (
     <>
+      <img src={`/images/uploads/${temp}`} alt={temp} width='300' />
       <div>
         <WaitIndicator/>
         <ul>
@@ -100,7 +134,7 @@ function Plants (props) {
             </label><br />
             <label htmlFor="imageName">Image Name: <br />
               <input
-                type="text"
+                type="file"
                 name='imageName'
                 value= {addForm.imageName}
                 onChange={(e) => handleChangeAddPlant(e)} />
@@ -145,6 +179,24 @@ function Plants (props) {
           : null
         }
       </div>
+      <form method="POST" action="/upload-profile-pic" encType="multipart/form-data">
+        <div>
+          <label>Select your profile picture:</label>
+          <input type="file" name="profile_pic" onChange={(e) => onFileChange(e)} />
+        </div>
+        <div>
+          <input type="button" name="btn_upload_profile_pic" value="Upload" onClick={(e) => handleImageSubmit(e)} />
+        </div>
+      </form>
+      {/* <form method="POST" action="/upload-profile-pic" encType="multipart/form-data">
+        <div>
+          <label>Select your profile picture:</label>
+          <input type="file" name="profile_pic"/>
+        </div>
+        <div>
+          <input type="submit" name="btn_upload_profile_pic" value="Upload" />
+        </div>
+      </form> */}
     </>
   )
 }
