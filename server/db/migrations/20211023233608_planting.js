@@ -5,7 +5,6 @@ exports.up = function (knex) {
     table.date('reap_propagation_date')
     table.date('fertilization_date')
     table.date('pest_control_date')
-    table.integer('plant_id').references('plants.id')
     table.string('user_id').references('auth0_id')
   })
 }

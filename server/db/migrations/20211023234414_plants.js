@@ -3,7 +3,6 @@ exports.up = function (knex) {
     table.increments('id')
     table.string('name')
     table.string('type')
-    table.string('image_name')
     table.date('created_at')
     table.float('cost')
   })

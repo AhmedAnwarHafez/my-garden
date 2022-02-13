@@ -8,7 +8,6 @@ exports.seed = function (knex) {
           reap_propagation_date: '8 February 2021',
           fertilization_date: '5 May 2020',
           pest_control_date: '5 July 2020',
-          plant_id: '1',
           user_id: '123'
         }
       ])

@@ -6,7 +6,6 @@ exports.seed = function (knex) {
           id: 1,
           name: 'watermelon',
           type: 'succulent',
-          image_name: 'watermelon.jpg',
           created_at: '19 October 2021',
           cost: '18.85'
         }

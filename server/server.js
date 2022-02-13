@@ -1,4 +1,5 @@
 const express = require('express')
+const db = require('./db/plants')
 const path = require('path')
 const multer = require('multer')
 const helpers = require('./helpers')
@@ -50,15 +51,16 @@ const storage = multer.diskStorage({
 
   // By default, multer removes file extensions so let's add them back
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+    const { id } = req.params
+    cb(null, 'id:' + id + '-' + file.fieldname + '-' + Date.now() + path.extname(file.originalname))
   }
 })
 
-server.post('/upload-profile-pic', (req, res) => {
+server.post('/upload-profile-pic/:id', (req, res) => {
+  const { id } = req.params
   // 'profile_pic' is the name of our file input field in the HTML form
   const upload = multer({ storage: storage, fileFilter: helpers.imageFilter }).single('profile_pic')
   upload(req, res, function (err) {
-    console.log(req.file)
     // req.file contains information of uploaded file
     // req.body contains information of text fields, if there were any
 
@@ -72,6 +74,16 @@ server.post('/upload-profile-pic', (req, res) => {
       return res.send(err)
     }
 
+    db.addImage(id, req.file.filename)
+      .then(() => {
+        res.sendStatus(201)
+        return null
+      })
+      .catch(err => {
+        res.status(500).send('server: add image has error', err.message)
+      })
+
+    console.log(req.file.filename)
     // Display uploaded image for user validation
     // res.send(`You have uploaded this image: <hr/><img src="images/uploads/${req.file.filename}" width="500"><hr /><a href="./">Upload another image</a>`)
     res.send(req.file.filename)

@@ -1,4 +1,5 @@
 import request from 'superagent'
+import axios from 'axios'
 const rootUrl = '/api/v1/plants'
 
 export function getPlants (auth0Id) {
@@ -35,16 +36,12 @@ export function deletePlant (id) {
     })
 }
 
-// export function addImage (selectedFile) {
-//   console.log(selectedFile)
-//   return request.post('/upload-profile-pic')
-//     // .send(selectedFile)
-//     .then(res => {
-//       console.log(res)
-//       console.log(res.req._data)
-//       return null
-//     })
-//     .catch(err => {
-//       console.error('api: addImage has error', err.message)
-//     })
-// }
+export function addImages (formData, config, id) {
+  return axios.post('/upload-profile-pic/' + id, formData, config)
+    .then(res => {
+      return res.data
+    })
+    .catch(err => {
+      console.error('api: addImages has error', err.message)
+    })
+}

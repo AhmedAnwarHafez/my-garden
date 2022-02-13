@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { addThePlant, fetchPlants } from '../actions/plants'
-import { addImage } from '../apis/plants'
 import Plant from './Plant'
 import WaitIndicator from './WaitIndicator'
-import axios from 'axios'
 
-// const auth0Id = '123'
-const auth0Id = '456'
+const auth0Id = '123'
+// const auth0Id = '456'
 
 function Plants (props) {
   useEffect(() => {
@@ -26,7 +24,7 @@ function Plants (props) {
     }
   )
   const [load, setLoad] = useState(false)
-  const [fileState, setFileState] = useState({ selectedFile: null })
+  // const [fileState, setFileState] = useState({ selectedFile: null })
   const [temp, setTemp] = useState('')
 
   function handleChangeAddPlant (e) {
@@ -65,38 +63,27 @@ function Plants (props) {
     setLoad(!load)
   }
 
-  function onFileChange (e) {
-    setFileState({ selectedFile: e.target.files[0] })
-  }
+  // function onFileChange (e) {
+  //   setFileState({ selectedFile: e.target.files[0] })
+  // }
 
-  function handleImageSubmit (e) {
-    // console.log(fileState.selectedFile)
-    // addImage(fileState.selectedFile)
-    // addImage()
-
-    e.preventDefault()
-    const formData = new FormData()
-    formData.append('profile_pic', fileState.selectedFile)
-    console.log(fileState.selectedFile)
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    }
-    axios.post('/upload-profile-pic', formData, config)
-      .then((response) => {
-        console.log(response)
-        setTemp(response.data)
-        // alert('The file is successfully uploaded')
-        return null
-      }).catch((err) => {
-        console.error(err.message)
-      })
-  }
+  // function handleImageSubmit (e) {
+  //   e.preventDefault()
+  //   const formData = new FormData()
+  //   formData.append('profile_pic', fileState.selectedFile)
+  //   // console.log(fileState.selectedFile)
+  //   const config = {
+  //     headers: {
+  //       'content-type': 'multipart/form-data'
+  //     }
+  //   }
+  //   props.dispatch(getImages(formData, config))
+  // }
 
   return (
     <>
-      <img src={`/images/uploads/${temp}`} alt={temp} width='300' />
+      {/* {console.log(props.plants)} */}
+      <img src={`/images/uploads/${props.imageNames}`} alt={temp} width='300' />
       <div>
         <WaitIndicator/>
         <ul>
@@ -107,7 +94,7 @@ function Plants (props) {
           { props.plants.map(plant => {
             return (
               <li key={plant.id}>
-                <Plant plant={plant} />
+                <Plant plant={plant} /* imageNames={props.imageNames} */ />
               </li>
             )
           })
@@ -117,7 +104,7 @@ function Plants (props) {
       <div>
         <p onClick={handleClickShowAddPlant}><strong>Add a Plant:</strong> </p>
         {load
-          ? <form onSubmit={handleSubmitAddPlant}>
+          ? <form onSubmit={(e) => { handleSubmitAddPlant(e)/* ; handleImageSubmit(e) */ }}>
             <label htmlFor="type">Plant Type: <br />
               <select name="type" id="type" onChange={(e) => handleChangeAddPlant(e)}>
                 <option value=''>--Select--</option>
@@ -132,13 +119,13 @@ function Plants (props) {
                 value= {addForm.name}
                 onChange={(e) => handleChangeAddPlant(e)} />
             </label><br />
-            <label htmlFor="imageName">Image Name: <br />
-              <input
-                type="file"
-                name='imageName'
-                value= {addForm.imageName}
-                onChange={(e) => handleChangeAddPlant(e)} />
-            </label><br />
+            {/* <label htmlFor="imageName">Image Name: <br />
+              <form method="POST" action="/upload-profile-pic" encType="multipart/form-data">
+                <div>
+                  <input type="file" name="profile_pic" onChange={(e) => onFileChange(e)} />
+                </div>
+              </form>
+            </label><br /> */}
             <label htmlFor="plantingDate">Planting Date: <br />
               <input
                 type="date"
@@ -179,24 +166,6 @@ function Plants (props) {
           : null
         }
       </div>
-      <form method="POST" action="/upload-profile-pic" encType="multipart/form-data">
-        <div>
-          <label>Select your profile picture:</label>
-          <input type="file" name="profile_pic" onChange={(e) => onFileChange(e)} />
-        </div>
-        <div>
-          <input type="button" name="btn_upload_profile_pic" value="Upload" onClick={(e) => handleImageSubmit(e)} />
-        </div>
-      </form>
-      {/* <form method="POST" action="/upload-profile-pic" encType="multipart/form-data">
-        <div>
-          <label>Select your profile picture:</label>
-          <input type="file" name="profile_pic"/>
-        </div>
-        <div>
-          <input type="submit" name="btn_upload_profile_pic" value="Upload" />
-        </div>
-      </form> */}
     </>
   )
 }
@@ -204,6 +173,7 @@ function Plants (props) {
 function mapStateToProps (globalState) {
   return {
     plants: globalState.plants
+    // imageNames: globalState.images
   }
 }
 
