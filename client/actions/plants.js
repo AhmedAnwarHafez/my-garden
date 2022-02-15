@@ -1,4 +1,4 @@
-import { getPlants, addPlant, updatePlant, deletePlant, addImages } from '../apis/plants'
+import { getPlants, addPlant, updatePlant, deletePlant } from '../apis/plants'
 export const FETCH_PLANTS_PENDING = 'FETCH_PLANTS_PENDING'
 export const FETCH_PLANTS_SUCCESS = 'FETCH_PLANTS_SUCCESS'
 export const FETCH_IMAGES_SUCCESS = 'FETCH_IMAGES_SUCCESS'
@@ -38,19 +38,6 @@ export function delPlant (id) {
     })
 }
 
-export function getImages (formData, config, id) {
-  return dispatch => {
-    return addImages(formData, config, id)
-      .then(imageNames => {
-        dispatch(fetchImagesSuccess(imageNames))
-        return null
-      })
-      .catch(err => {
-        console.error('actions: getImages has error', err.message)
-      })
-  }
-}
-
 export function fetchPlantsPending () {
   return {
     type: FETCH_PLANTS_PENDING
@@ -61,12 +48,5 @@ export function fetchPlantsSuccess (plants) {
   return {
     type: FETCH_PLANTS_SUCCESS,
     plants
-  }
-}
-
-export function fetchImagesSuccess (imageNames) {
-  return {
-    type: FETCH_IMAGES_SUCCESS,
-    imageNames
   }
 }

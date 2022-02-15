@@ -1,5 +1,5 @@
 const express = require('express')
-const db = require('./db/plants')
+const db = require('./db/images')
 const path = require('path')
 const multer = require('multer')
 const helpers = require('./helpers')
@@ -9,6 +9,7 @@ const protectedRoutes = require('./routes/protected')
 const privateRoutes = require('./routes/private')
 const usersRoutes = require('./routes/users')
 const plantsRoutes = require('./routes/plants')
+const imagesRoutes = require('./routes/images')
 
 const server = express()
 
@@ -20,6 +21,7 @@ server.use('/api/v1/public', publicRoutes)
 server.use('/api/v1/protected', protectedRoutes)
 server.use('/api/v1/private', privateRoutes)
 server.use('/api/v1/plants', plantsRoutes)
+server.use('/api/v1/images', imagesRoutes)
 
 module.exports = server
 
@@ -74,7 +76,7 @@ server.post('/upload-profile-pic/:id', (req, res) => {
       return res.send(err)
     }
 
-    db.addImage(id, req.file.filename)
+    db.addImages(id, req.file.filename)
       .then(() => {
         res.sendStatus(201)
         return null
@@ -83,10 +85,10 @@ server.post('/upload-profile-pic/:id', (req, res) => {
         res.status(500).send('server: add image has error', err.message)
       })
 
-    console.log(req.file.filename)
+    // console.log(req.file.filename)
     // Display uploaded image for user validation
     // res.send(`You have uploaded this image: <hr/><img src="images/uploads/${req.file.filename}" width="500"><hr /><a href="./">Upload another image</a>`)
-    res.send(req.file.filename)
+    // res.send(req.file.filename)
   })
 })
 

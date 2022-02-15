@@ -1,4 +1,4 @@
-import { FETCH_IMAGES_SUCCESS } from '../actions/plants'
+import { FETCH_IMAGES_SUCCESS } from '../actions/images'
 
 const initialState = []
 

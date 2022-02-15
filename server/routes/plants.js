@@ -15,7 +15,7 @@ router.get('/:auth0Id', (req, res) => {
       })
       .catch(err => {
         console.error(err)
-        res.status(500).json({ message: 'router: GET has error' })
+        res.status(500).json({ message: 'router: GET plants has error' })
       })
   }, 1000)
 })

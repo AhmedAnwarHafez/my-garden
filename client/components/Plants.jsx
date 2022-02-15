@@ -25,7 +25,6 @@ function Plants (props) {
   )
   const [load, setLoad] = useState(false)
   // const [fileState, setFileState] = useState({ selectedFile: null })
-  const [temp, setTemp] = useState('')
 
   function handleChangeAddPlant (e) {
     const { name, value } = e.target
@@ -82,8 +81,6 @@ function Plants (props) {
 
   return (
     <>
-      {/* {console.log(props.plants)} */}
-      <img src={`/images/uploads/${props.imageNames}`} alt={temp} width='300' />
       <div>
         <WaitIndicator/>
         <ul>

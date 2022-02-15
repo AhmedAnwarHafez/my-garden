@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
-import { delPlant, fetchPlants, getImages } from '../actions/plants'
+import React, { useState, useEffect } from 'react'
+import { delPlant, fetchPlants } from '../actions/plants'
+import { addTheImages, fetchImages } from '../actions/images'
 import { connect } from 'react-redux'
 
 const auth0Id = '123'
 // const auth0Id = '456'
 
 function Plant (props) {
+  useEffect(async () => {
+    await props.dispatch(fetchImages())
+  }, [])
+  console.log(props.imageNames)
+
   const [fileState, setFileState] = useState({ selectedFile: null })
-  const { id, name, type, imageName, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
+  const { id, name, type, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
 
   let reapOrPropagation
   type === 'vegetable'
@@ -24,7 +30,7 @@ function Plant (props) {
   }
 
   function handleImageSubmit (e) {
-    e.preventDefault()
+    // e.preventDefault()
     const formData = new FormData()
     formData.append('profile_pic', fileState.selectedFile)
     // console.log(fileState.selectedFile)
@@ -33,16 +39,21 @@ function Plant (props) {
         'content-type': 'multipart/form-data'
       }
     }
-    props.dispatch(getImages(formData, config, id))
+    props.dispatch(addTheImages(formData, config, id))
+    props.dispatch(fetchImages())
     props.dispatch(fetchPlants(auth0Id))
   }
+
+  const imageObj = props.imageNames.find((elem) => { return Number(elem.plantId) === Number(id) })
 
   return (
     <div>
       <p><strong>Id:</strong> {id}</p>
       <p><strong>Plant Type:</strong> {type}</p>
       <p><strong>Plant Name:</strong> {name}</p>
-      <p><strong>Image:</strong> <br /> <img style={{ width: '200px', height: 'auto' }} src={`/images/uploads/${imageName}`} alt={imageName} /> </p>
+      {!imageObj
+        ? <p><strong>Image:</strong> <br /> <img style={{ width: '200px', height: 'auto' }} src={'/images/uploads/null.jpg'} alt={'no image'}/> </p>
+        : <p><strong>Image:</strong> <br /> <img style={{ width: '200px', height: 'auto' }} src={`/images/uploads/${imageObj.imageName}`} alt={imageObj.imageName} /> </p>}
       <p><strong>Created At:</strong> {createdAt}</p>
       <p><strong>Planting Date:</strong> {plantingDate}</p>
       <p><strong>{reapOrPropagation}</strong> {reapOrPropagationDate}</p>
@@ -63,4 +74,10 @@ function Plant (props) {
   )
 }
 
-export default connect()(Plant)
+function mapStateToProps (globalState) {
+  return {
+    imageNames: globalState.images
+  }
+}
+
+export default connect(mapStateToProps)(Plant)

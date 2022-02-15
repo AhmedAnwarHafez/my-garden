@@ -3,15 +3,13 @@ const connection = require('./connection')
 module.exports = {
   getPlants,
   addPlant,
-  addImage,
   updatePlant,
   delPlant
 }
 
 function getPlants (auth0Id, db = connection) {
-  return db('plants_images')
-    .join('plants', 'plants_images.plant_id', 'plants.id')
-    .join('planting', 'plants_images.plant_id', 'planting.id')
+  return db('plants')
+    .join('planting', 'plants.id', 'planting.id')
     .where('planting.user_id', auth0Id)
     .select(
       'planting.planting_date as plantingDate',
@@ -23,8 +21,7 @@ function getPlants (auth0Id, db = connection) {
       'plants.name as name',
       'plants.type as type',
       'plants.created_at as createdAt',
-      'plants.cost as cost',
-      'image_name as imageName'
+      'plants.cost as cost'
     )
     .catch(err => {
       console.error('Database: getPlants has error', err.message)
@@ -55,19 +52,6 @@ function addPlant (plant, db = connection) {
     })
     .catch(err => {
       console.error('Database: addPlant has error', err.message)
-    })
-}
-
-function addImage (id, filename, db = connection) {
-  const input = {
-    plant_id: id,
-    image_name: filename
-  }
-
-  return db('plants_images')
-    .insert(input)
-    .catch(err => {
-      console.error('Database: addImage has error', err.message)
     })
 }
 
