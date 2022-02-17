@@ -77,7 +77,7 @@ function updatePlant (id, plant, db = connection) {
         .update(editPlant)
     })
     .catch(err => {
-      console.log('Database: updatePlant has error', err.message)
+      console.error('Database: updatePlant has error', err.message)
     })
 }
 
@@ -91,6 +91,6 @@ function delPlant (id, db = connection) {
         .del()
     })
     .catch(err => {
-      console.log('Database: delPlant has error', err.mess)
+      console.error('Database: delPlant has error', err.mess)
     })
 }

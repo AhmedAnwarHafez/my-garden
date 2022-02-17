@@ -14,7 +14,7 @@ export function getImages () {
 }
 
 export function addImages (formData, config, id) {
-  return axios.post('/upload-profile-pic/' + id, formData, config)
+  return axios.post(rootUrl + '/upload-plant-pic/' + id, formData, config)
     .then(() => {
       console.log('api: addImages is successful.')
       return null

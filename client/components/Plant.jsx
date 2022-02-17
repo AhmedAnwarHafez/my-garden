@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { delPlant, fetchPlants } from '../actions/plants'
 import { addTheImages, fetchImages } from '../actions/images'
+import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 const auth0Id = '123'
@@ -10,7 +11,7 @@ function Plant (props) {
   useEffect(async () => {
     await props.dispatch(fetchImages())
   }, [])
-  console.log(props.imageNames)
+  const history = useHistory()
 
   const [fileState, setFileState] = useState({ selectedFile: null })
   const { id, name, type, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
@@ -32,7 +33,7 @@ function Plant (props) {
   function handleImageSubmit (e) {
     // e.preventDefault()
     const formData = new FormData()
-    formData.append('profile_pic', fileState.selectedFile)
+    formData.append('plant_pic', fileState.selectedFile)
     // console.log(fileState.selectedFile)
     const config = {
       headers: {
@@ -41,7 +42,9 @@ function Plant (props) {
     }
     props.dispatch(addTheImages(formData, config, id))
     props.dispatch(fetchImages())
-    props.dispatch(fetchPlants(auth0Id))
+    // props.dispatch(fetchPlants(auth0Id))
+    // history.push('/')
+    location.reload(true)
   }
 
   const imageObj = props.imageNames.find((elem) => { return Number(elem.plantId) === Number(id) })
@@ -62,9 +65,9 @@ function Plant (props) {
       <p className={type === 'vegetable' ? 'hide' : 'null'}><strong>Cost:</strong> $ {cost}</p>
       <p><strong>User Id:</strong> {userId}</p>
       <label htmlFor="imageName">Image Name: <br />
-        <form method="POST" action="/upload-profile-pic" encType="multipart/form-data">
+        <form /* method="POST" action="/upload-plant-pic" */ encType="multipart/form-data">
           <div>
-            <input type="file" name="profile_pic" id={id} onChange={(e) => onFileChange(e)} />
+            <input type="file" name="plant_pic" id={id} onChange={(e) => onFileChange(e)} />
           </div>
         </form>
       </label><br/>

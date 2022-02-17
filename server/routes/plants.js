@@ -75,7 +75,6 @@ router.patch('/update/:id', (req, res) => {
 
 router.delete('/del', async (req, res) => {
   const { id } = req.body
-  console.log(id)
   try {
     await db.delPlant(id)
     res.sendStatus(200)
