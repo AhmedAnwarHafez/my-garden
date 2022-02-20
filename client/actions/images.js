@@ -5,7 +5,7 @@ export function fetchImages () {
   return dispatch => {
     return getImages()
       .then(imageNames => {
-        console.log('action: ' + imageNames)
+        // console.log('action: ' + imageNames)
         dispatch(fetchImagesSuccess(imageNames))
         return null
       })

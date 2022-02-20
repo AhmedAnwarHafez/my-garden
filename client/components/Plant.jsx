@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { delPlant, fetchPlants } from '../actions/plants'
 import { addTheImages, fetchImages } from '../actions/images'
-import { useHistory } from 'react-router-dom'
+import Image from './Image'
+// import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 const auth0Id = '123'
@@ -11,7 +12,7 @@ function Plant (props) {
   useEffect(async () => {
     await props.dispatch(fetchImages())
   }, [])
-  const history = useHistory()
+  // const history = useHistory()
 
   const [fileState, setFileState] = useState({ selectedFile: null })
   const { id, name, type, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
@@ -27,14 +28,19 @@ function Plant (props) {
   }
 
   function onFileChange (e) {
-    setFileState({ selectedFile: e.target.files[0] })
+    // setFileState({ selectedFile: e.target.files[0] })
+    setFileState({ selectedFile: e.target.files })
   }
 
   function handleImageSubmit (e) {
     // e.preventDefault()
     const formData = new FormData()
-    formData.append('plant_pic', fileState.selectedFile)
-    // console.log(fileState.selectedFile)
+
+    for (let i = 0; i < fileState.selectedFile.length; i++) {
+      formData.append('plant_pic', fileState.selectedFile[i])
+    }
+
+    console.log(fileState.selectedFile)
     const config = {
       headers: {
         'content-type': 'multipart/form-data'
@@ -47,16 +53,26 @@ function Plant (props) {
     location.reload(true)
   }
 
-  const imageObj = props.imageNames.find((elem) => { return Number(elem.plantId) === Number(id) })
+  const images = props.imageNames.filter((elem) => { return Number(elem.plantId) === Number(id) })
 
   return (
     <div>
       <p><strong>Id:</strong> {id}</p>
       <p><strong>Plant Type:</strong> {type}</p>
       <p><strong>Plant Name:</strong> {name}</p>
-      {!imageObj
-        ? <p><strong>Image:</strong> <br /> <img style={{ width: '200px', height: 'auto' }} src={'/images/uploads/null.jpg'} alt={'no image'}/> </p>
-        : <p><strong>Image:</strong> <br /> <img style={{ width: '200px', height: 'auto' }} src={`/images/uploads/${imageObj.imageName}`} alt={imageObj.imageName} /> </p>}
+      <ul style={{ padding: '0px' }} >
+        {images.length === 0
+          ? <p><strong>Image:</strong> <br /> Please add a image. </p>
+          : <p><strong>Image:</strong> <br />
+            {images.map(imageObj => {
+              return (
+                <li key={imageObj.id}>
+                  <Image imageObj={imageObj}/>
+                </li>
+              )
+            })}
+          </p>}
+      </ul>
       <p><strong>Created At:</strong> {createdAt}</p>
       <p><strong>Planting Date:</strong> {plantingDate}</p>
       <p><strong>{reapOrPropagation}</strong> {reapOrPropagationDate}</p>
@@ -67,7 +83,8 @@ function Plant (props) {
       <label htmlFor="imageName">Image Name: <br />
         <form /* method="POST" action="/upload-plant-pic" */ encType="multipart/form-data">
           <div>
-            <input type="file" name="plant_pic" id={id} onChange={(e) => onFileChange(e)} />
+            {/* <input type="file" name="plant_pic" id={id} onChange={(e) => onFileChange(e)} /> */}
+            <input type="file" name="plant_pic" multiple /* accept='.jpg, .jpeg, .png' */ id={id} onChange={(e) => onFileChange(e)} />
           </div>
         </form>
       </label><br/>

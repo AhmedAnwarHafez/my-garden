@@ -5,7 +5,7 @@ const rootUrl = '/api/v1/images'
 export function getImages () {
   return request.get(rootUrl + '/')
     .then((res) => {
-      console.log('api: ' + res)
+      // console.log('api: ' + res)
       return res.body
     })
     .catch(err => {
