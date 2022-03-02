@@ -5,15 +5,16 @@ import Image from './Image'
 // import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-const auth0Id = '123'
+// const auth0Id = '123'
 // const auth0Id = '456'
 
 function Plant (props) {
-  useEffect(async () => {
-    await props.dispatch(fetchImages())
+  useEffect(() => {
+    props.dispatch(fetchImages())
   }, [])
   // const history = useHistory()
-
+  const { user } = props
+  const auth0Id = user.auth0Id
   const [fileState, setFileState] = useState({ selectedFile: null })
   const { id, name, type, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
 
@@ -96,7 +97,8 @@ function Plant (props) {
 
 function mapStateToProps (globalState) {
   return {
-    imageNames: globalState.images
+    imageNames: globalState.images,
+    user: globalState.user
   }
 }
 

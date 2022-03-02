@@ -1,9 +1,9 @@
 const connection = require('./connection')
 
-module.exports = {
-  getImages,
-  addImages
-}
+// module.exports = {
+//   getImages,
+//   addImages
+// }
 
 function getImages (db = connection) {
   return db('plants_images')
@@ -17,15 +17,31 @@ function getImages (db = connection) {
     })
 }
 
-function addImages (id, filename, db = connection) {
-  const input = {
-    plant_id: id,
-    image_name: filename
-  }
-
+const addImages = (picNames, db = connection) => {
   return db('plants_images')
-    .insert(input)
+    .insert(picNames)
     .catch(err => {
-      console.error('Database: addImage has error', err.message)
+      console.error('DB addImage has error', err.message)
     })
+}
+
+// Add images by object
+// function addImages (id, filename, db = connection) {
+//   const input = {
+//     plant_id: id,
+//     image_name: filename
+//   }
+
+//   return db('plants_images')
+//     .insert(input)
+//     .catch(err => {
+//       console.error('Database: addImage has error', err.message)
+//     })
+// }
+
+// Add images by array
+
+module.exports = {
+  getImages,
+  addImages
 }

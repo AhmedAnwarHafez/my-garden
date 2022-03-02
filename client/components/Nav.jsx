@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 
 function Nav (props) {
   const { user } = props
+  // console.log('nav ' + user)
+  // console.log(user)
   const login = getLoginFn(useAuth0)
   const logout = getLogoutFn(useAuth0)
   const register = getRegisterFn(useAuth0)
