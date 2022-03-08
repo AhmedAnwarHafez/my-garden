@@ -21,7 +21,6 @@ function Plants (props) {
     {
       type: '',
       name: '',
-      imageName: '',
       plantingDate: '',
       reapOrPropagationDate: '',
       fertilizationDate: '',
@@ -44,24 +43,50 @@ function Plants (props) {
 
   function handleSubmitAddPlant (e) {
     e.preventDefault()
-    const plant = {
-      ...addForm,
-      auth0Id
+    if (document.getElementsByClassName('errorColour').length) {
+      // [...document.getElementsByClassName('errorColour')].forEach((elem) => {
+      //   elem.className = 'addFormColour'
+      // })
+      document.querySelectorAll('.errorColour').forEach(elem => {
+        elem.className = 'addFormColour'
+      })
     }
-    addThePlant(plant)
-    props.dispatch(fetchPlants(auth0Id))
-    const clearAddForm = {
-      type: '',
-      name: '',
-      imageName: '',
-      plantingDate: '',
-      reapOrPropagationDate: '',
-      fertilizationDate: '',
-      pestControlDate: '',
-      cost: ''
+
+    document.querySelectorAll('.addFormColour').forEach((elem) => {
+      if (elem.value.match(/^\s*$/)) {
+        document.getElementById(`${elem.id}`).className = 'errorColour'
+      }
+    })
+
+    if (document.querySelectorAll('.errorColour').length) {
+      alert('Please fill in all the required fields.')
     }
-    setAddForm(clearAddForm)
-    setLoad(false)
+
+    if (isNaN(document.getElementById('cost').value)) {
+      document.getElementById('cost').className = 'errorColour'
+      alert('Please only enter number at the cost filed.')
+    }
+
+    if (!document.querySelectorAll('.errorColour').length) {
+      const plant = {
+        ...addForm,
+        auth0Id
+      }
+      addThePlant(plant)
+      props.dispatch(fetchPlants(auth0Id))
+      const clearAddForm = {
+        type: '',
+        name: '',
+        imageName: '',
+        plantingDate: '',
+        reapOrPropagationDate: '',
+        fertilizationDate: '',
+        pestControlDate: '',
+        cost: ''
+      }
+      setAddForm(clearAddForm)
+      setLoad(false)
+    }
   }
 
   function handleClickShowAddPlant () {
@@ -83,7 +108,7 @@ function Plants (props) {
               { props.plants.map(plant => {
                 return (
                   <li key={plant.id}>
-                    <Plant plant={plant} /* imageNames={props.imageNames} */ />
+                    <Plant plant={plant} />
                   </li>
                 )
               })
@@ -93,54 +118,66 @@ function Plants (props) {
           <div>
             <p onClick={handleClickShowAddPlant}><strong>Add a Plant:</strong> </p>
             {load
-              ? <form onSubmit={(e) => { handleSubmitAddPlant(e)/* ; handleImageSubmit(e) */ }}>
-                <label htmlFor="type">Plant Type: <br />
-                  <select name="type" id="type" onChange={(e) => handleChangeAddPlant(e)}>
+              ? <form onSubmit={(e) => { handleSubmitAddPlant(e) }}>
+                <label htmlFor="plantType">Plant Type: <br />
+                  <select className='addFormColour' name="type" id="type" onChange={(e) => handleChangeAddPlant(e)}>
                     <option value=''>--Select--</option>
                     <option value='Vegetable'>Vegetable</option>
                     <option value='Succulent'>Succulent</option>
                   </select><br />
                 </label>
-                <label htmlFor="name">Plant Name: <br />
+                <label htmlFor="plantName">Plant Name: <br />
                   <input
                     type="text"
+                    id='name'
                     name='name'
                     value= {addForm.name}
+                    className='addFormColour'
                     onChange={(e) => handleChangeAddPlant(e)} />
                 </label><br />
                 <label htmlFor="plantingDate">Planting Date: <br />
                   <input
                     type="date"
+                    id='plantingDate'
                     name='plantingDate'
                     value= {addForm.plantingDate}
+                    className='addFormColour'
                     onChange={(e) => handleChangeAddPlant(e)}/>
                 </label><br />
                 <label htmlFor="reapOrPropagationDate">Reap or Propagation Date: <br />
                   <input
                     type="date"
+                    id='reapOrPropagationDate'
                     name='reapOrPropagationDate'
                     value= {addForm.reapOrPropagationDate}
+                    className='addFormColour'
                     onChange={(e) => handleChangeAddPlant(e)} />
                 </label><br />
                 <label htmlFor="fertilizationDate">Fertilization Date: <br />
                   <input
                     type="date"
+                    id='fertilizationDate'
                     name='fertilizationDate'
                     value= {addForm.fertilizationDate}
+                    className='addFormColour'
                     onChange={(e) => handleChangeAddPlant(e)} />
                 </label><br />
                 <label htmlFor="pestControlDate">Pest Control Date: <br />
                   <input
                     type="date"
+                    id='pestControlDate'
                     name='pestControlDate'
                     value= {addForm.pestControlDate}
+                    className='addFormColour'
                     onChange={(e) => handleChangeAddPlant(e)} />
                 </label><br />
                 <label htmlFor="cost">Cost: <br />
                   <input
                     type="text"
+                    id='cost'
                     name='cost'
                     value= {addForm.cost}
+                    className='addFormColour'
                     onChange={(e) => handleChangeAddPlant(e)} />
                 </label><br /><br />
                 <button>Submit</button>

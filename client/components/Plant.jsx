@@ -41,7 +41,6 @@ function Plant (props) {
       formData.append('plant_pic', fileState.selectedFile[i])
     }
 
-    console.log(fileState.selectedFile)
     const config = {
       headers: {
         'content-type': 'multipart/form-data'
