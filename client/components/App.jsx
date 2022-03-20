@@ -8,6 +8,8 @@ import PingRoutes from './PingRoutes'
 import Registeration from './Registeration'
 import Users from './Users'
 import Plants from './Plants'
+import AddPlant from './AddPlant'
+import EditPlant from './EditPlant'
 
 function App () {
   cacheUser(useAuth0)
@@ -15,10 +17,12 @@ function App () {
   return (
     <div className='app'>
       <Route exact path='/' component={Nav} />
-      <Route path='/' component={Plants} />
+      <Route exact path='/' component={Plants} />
       <Route exact path='/' component={Users} />
       <Route exact path='/' component={PingRoutes} />
       <Route path='/register' component={Registeration} />
+      <Route path='/addPlant' component={AddPlant}/>
+      <Route path='/editPlant' component={EditPlant}/>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { delPlant, fetchPlants } from '../actions/plants'
 import { addTheImages, fetchImages } from '../actions/images'
+import { useHistory } from 'react-router-dom'
 import Image from './Image'
 // import { useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -9,6 +10,8 @@ import { connect } from 'react-redux'
 // const auth0Id = '456'
 
 function Plant (props) {
+  const history = useHistory()
+
   useEffect(() => {
     props.dispatch(fetchImages())
   }, [])
@@ -19,13 +22,21 @@ function Plant (props) {
   const { id, name, type, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
 
   let reapOrPropagation
-  type === 'vegetable'
+  type === 'Vegetable'
     ? reapOrPropagation = 'Reap Date'
     : reapOrPropagation = 'Propagation Date'
 
   function handleClickDelPlant () {
     delPlant(id)
     props.dispatch(fetchPlants(auth0Id))
+  }
+
+  function handleClickEditPlant () {
+    // history.push('/editPlant')
+    history.push({
+      pathname: '/editPlant',
+      state: { detail: props.plant }
+    })
   }
 
   function onFileChange (e) {
@@ -50,7 +61,7 @@ function Plant (props) {
     props.dispatch(fetchImages())
     // props.dispatch(fetchPlants(auth0Id))
     // history.push('/')
-    location.reload(true)
+    location.reload()
   }
 
   const images = props.imageNames.filter((elem) => { return Number(elem.plantId) === Number(id) })
@@ -89,6 +100,7 @@ function Plant (props) {
         </form>
       </label><br/>
       <button onClick={e => handleImageSubmit(e)}>Submit</button> <br/><br/>
+      <button onClick={handleClickEditPlant}>Edit</button> {'\u00A0'}
       <button onClick={handleClickDelPlant}>X</button>
     </div>
   )
