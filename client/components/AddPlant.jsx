@@ -46,12 +46,16 @@ function AddPlant (props) {
     })
 
     if (document.querySelectorAll('.errorColour').length) {
-      alert('Please fill in all the required fields.')
+      setTimeout(() => {
+        alert('Please fill in all the required fields.')
+      }, 1)
     }
 
     if (isNaN(document.getElementById('cost').value)) {
       document.getElementById('cost').className = 'errorColour'
-      alert('Please only enter number at the cost filed.')
+      setTimeout(() => {
+        alert('Please only enter number at the cost filed.')
+      }, 1)
     }
 
     if (!document.querySelectorAll('.errorColour').length) {
@@ -60,7 +64,6 @@ function AddPlant (props) {
         auth0Id
       }
       addThePlant(plant)
-      props.dispatch(fetchPlants(auth0Id))
       const clearAddForm = {
         type: '',
         name: '',
