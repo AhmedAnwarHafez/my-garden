@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { delPlant, fetchPlants } from '../actions/plants'
-import { addTheImages, fetchImages } from '../actions/images'
+import { fetchImages } from '../actions/images'
 import { useHistory } from 'react-router-dom'
 import Image from './Image'
 // import { useHistory } from 'react-router-dom'
@@ -18,7 +18,6 @@ function Plant (props) {
   // const history = useHistory()
   const { user } = props
   const auth0Id = user.auth0Id
-  const [fileState, setFileState] = useState({ selectedFile: null })
   const { id, name, type, createdAt, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.plant
 
   let reapOrPropagation
@@ -32,36 +31,10 @@ function Plant (props) {
   }
 
   function handleClickEditPlant () {
-    // history.push('/editPlant')
     history.push({
       pathname: '/editPlant',
-      state: { detail: props.plant }
+      state: { plant: props.plant, images }
     })
-  }
-
-  function onFileChange (e) {
-    // setFileState({ selectedFile: e.target.files[0] })
-    setFileState({ selectedFile: e.target.files })
-  }
-
-  function handleImageSubmit (e) {
-    // e.preventDefault()
-    const formData = new FormData()
-
-    for (let i = 0; i < fileState.selectedFile.length; i++) {
-      formData.append('plant_pic', fileState.selectedFile[i])
-    }
-
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
-    }
-    props.dispatch(addTheImages(formData, config, id))
-    props.dispatch(fetchImages())
-    // props.dispatch(fetchPlants(auth0Id))
-    // history.push('/')
-    location.reload()
   }
 
   const images = props.imageNames.filter((elem) => { return Number(elem.plantId) === Number(id) })
@@ -91,15 +64,6 @@ function Plant (props) {
       <p><strong>Pest Control Date:</strong> {pestControlDate}</p>
       <p className={type === 'vegetable' ? 'hide' : 'null'}><strong>Cost:</strong> $ {cost}</p>
       <p><strong>User Id:</strong> {userId}</p>
-      <label htmlFor="imageName">Image Name: <br />
-        <form /* method="POST" action="/upload-plant-pic" */ encType="multipart/form-data">
-          <div>
-            {/* <input type="file" name="plant_pic" id={id} onChange={(e) => onFileChange(e)} /> */}
-            <input type="file" name="plant_pic" multiple /* accept='.jpg, .jpeg, .png' */ id={id} onChange={(e) => onFileChange(e)} />
-          </div>
-        </form>
-      </label><br/>
-      <button onClick={e => handleImageSubmit(e)}>Submit</button> <br/><br/>
       <button onClick={handleClickEditPlant}>Edit</button> {'\u00A0'}
       <button onClick={handleClickDelPlant}>X</button>
     </div>

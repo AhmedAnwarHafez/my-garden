@@ -32,14 +32,14 @@ function AddPlant (props) {
     e.preventDefault()
     if (document.getElementsByClassName('errorColour').length) {
       // [...document.getElementsByClassName('errorColour')].forEach((elem) => {
-      //   elem.className = 'addFormColour'
+      //   elem.className = 'formColour'
       // })
       document.querySelectorAll('.errorColour').forEach(elem => {
-        elem.className = 'addFormColour'
+        elem.className = 'formColour'
       })
     }
 
-    document.querySelectorAll('.addFormColour').forEach((elem) => {
+    document.querySelectorAll('.formColour').forEach((elem) => {
       if (elem.value.match(/^\s*$/)) {
         document.getElementById(`${elem.id}`).className = 'errorColour'
       }
@@ -85,7 +85,7 @@ function AddPlant (props) {
         <button onClick={() => { history.push('/') }}>Home</button>
         <p ><strong>Add a Plant:</strong> </p>
         <label htmlFor="plantType"><strong>Plant Type:</strong><br />
-          <select className='addFormColour' name="type" id="type" onChange={(e) => handleChangeAddPlant(e)}>
+          <select className='formColour' name="type" id="type" onChange={(e) => handleChangeAddPlant(e)}>
             <option value=''>--Select--</option>
             <option value='Vegetable'>Vegetable</option>
             <option value='Succulent'>Succulent</option>
@@ -97,7 +97,7 @@ function AddPlant (props) {
             id='name'
             name='name'
             value= {addForm.name}
-            className='addFormColour'
+            className='formColour'
             onChange={(e) => handleChangeAddPlant(e)} />
         </label><br />
         <label htmlFor="plantingDate"><strong>Planting Date:</strong> <br />
@@ -106,7 +106,7 @@ function AddPlant (props) {
             id='plantingDate'
             name='plantingDate'
             value= {addForm.plantingDate}
-            className='addFormColour'
+            className='formColour'
             onChange={(e) => handleChangeAddPlant(e)}/>
         </label><br />
         <label htmlFor="reapOrPropagationDate"><strong>Reap or Propagation Date:</strong> <br />
@@ -115,7 +115,7 @@ function AddPlant (props) {
             id='reapOrPropagationDate'
             name='reapOrPropagationDate'
             value= {addForm.reapOrPropagationDate}
-            className='addFormColour'
+            className='formColour'
             onChange={(e) => handleChangeAddPlant(e)} />
         </label><br />
         <label htmlFor="fertilizationDate"><strong>Fertilization Date:</strong> <br />
@@ -124,7 +124,7 @@ function AddPlant (props) {
             id='fertilizationDate'
             name='fertilizationDate'
             value= {addForm.fertilizationDate}
-            className='addFormColour'
+            className='formColour'
             onChange={(e) => handleChangeAddPlant(e)} />
         </label><br />
         <label htmlFor="pestControlDate"><strong>Pest Control Date:</strong> <br />
@@ -133,7 +133,7 @@ function AddPlant (props) {
             id='pestControlDate'
             name='pestControlDate'
             value= {addForm.pestControlDate}
-            className='addFormColour'
+            className='formColour'
             onChange={(e) => handleChangeAddPlant(e)} />
         </label><br />
         <label htmlFor="cost"><strong>Cost:</strong> <br />
@@ -142,7 +142,7 @@ function AddPlant (props) {
             id='cost'
             name='cost'
             value= {addForm.cost}
-            className='addFormColour'
+            className='formColour'
             onChange={(e) => handleChangeAddPlant(e)} />
         </label><br /><br />
         <button>Submit</button>
