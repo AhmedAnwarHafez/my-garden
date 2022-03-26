@@ -5,7 +5,7 @@ import { cacheUser } from '../auth0-utils'
 import { Route } from 'react-router'
 import Nav from './Nav'
 import PingRoutes from './PingRoutes'
-import Registeration from './Registeration'
+import Registration from './Registration'
 import Users from './Users'
 import Plants from './Plants'
 import AddPlant from './AddPlant'
@@ -20,9 +20,9 @@ function App () {
       <Route exact path='/' component={Plants} />
       <Route exact path='/' component={Users} />
       <Route exact path='/' component={PingRoutes} />
-      <Route path='/register' component={Registeration} />
+      <Route path='/register' component={Registration} />
       <Route path='/addPlant' component={AddPlant}/>
-      <Route path='/editPlant' component={EditPlant}/>
+      <Route path='/editPlant/:id' component={EditPlant}/>
     </div>
   )
 }

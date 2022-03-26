@@ -23,3 +23,14 @@ export function addImages (formData, config, id) {
       console.error('api: addImages has error', err.message)
     })
 }
+
+export function delImage (id) {
+  return request.del(rootUrl + '/del/' + id)
+    .then(() => {
+      console.log('api: delImage is successful.')
+      return null
+    })
+    .catch(err => {
+      console.error('api: delImage has error', err.message)
+    })
+}

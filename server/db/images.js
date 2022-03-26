@@ -25,6 +25,15 @@ const addImages = (picNames, db = connection) => {
     })
 }
 
+const delImage = (id, db = connection) => {
+  return db('plants_images')
+    .where('id', id)
+    .del()
+    .catch(err => {
+      console.error('DB delImage has error', err.message)
+    })
+}
+
 // Add images by object
 // function addImages (id, filename, db = connection) {
 //   const input = {
@@ -43,5 +52,6 @@ const addImages = (picNames, db = connection) => {
 
 module.exports = {
   getImages,
-  addImages
+  addImages,
+  delImage
 }

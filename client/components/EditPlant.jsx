@@ -1,29 +1,53 @@
-import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { addTheImages, fetchImages } from '../actions/images'
-import { updateThePlant } from '../actions/plants'
-import Image from './Image'
+import { fetchPlants, updateThePlant } from '../actions/plants'
+import EditImage from './EditImage'
 
 function EditPlant (props) {
-  const history = useHistory()
-  const { id, name, type, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = props.location.state.plant
-  console.log(props.location.state.plant)
-  const [fileState, setFileState] = useState({ selectedFile: null })
+  console.log(props)
+  const { user } = props
+  const auth0Id = user.auth0Id
+  const { id } = useParams()
+  // console.log(id)
   const [editForm, setEditForm] = useState({
-    name,
-    type,
-    cost,
-    plantingDate,
-    reapOrPropagationDate,
-    fertilizationDate,
-    pestControlDate
+    name: '',
+    type: '',
+    cost: '',
+    plantingDate: '',
+    reapOrPropagationDate: '',
+    fertilizationDate: '',
+    pestControlDate: ''
   })
+  useEffect(() => {
+    console.log('aaaaaa')
+    if (auth0Id) {
+      props.dispatch(fetchPlants(auth0Id))
+      props.dispatch(fetchImages())
+      const thePlant = props.plants.find(plant => plant.id === Number(id))
+      setEditForm({
+        name: thePlant?.name,
+        type: thePlant?.type,
+        cost: thePlant?.cost,
+        plantingDate: thePlant?.plantingDate,
+        reapOrPropagationDate: thePlant?.reapOrPropagationDate,
+        fertilizationDate: thePlant?.fertilizationDate,
+        pestControlDate: thePlant?.pestControlDate
+      })
+    }
+  }, [])
+  const history = useHistory()
 
-  let reapOrPropagation
-  type === 'Vegetable'
-    ? reapOrPropagation = 'Reap Date'
-    : reapOrPropagation = 'Propagation Date'
+  // console.log(thePlant)
+  // const { name, type, cost, plantingDate, reapOrPropagationDate, fertilizationDate, pestControlDate, userId } = thePlant[0]
+  // console.log(thePlant[0])
+  const [fileState, setFileState] = useState({ selectedFile: null })
+  console.log('useState')
+
+  const reapOrPropagation = editForm.type === 'Vegetable'
+    ? 'Reap Date'
+    : 'Propagation Date'
 
   function handleChangeEditPlant (e) {
     e.preventDefault()
@@ -62,7 +86,7 @@ function EditPlant (props) {
     }
     if (!document.querySelectorAll('.errorColour').length) {
       updateThePlant(id, editForm)
-      history.push('/')
+      history.push('/editPlant/' + id)
     }
   }
 
@@ -86,9 +110,10 @@ function EditPlant (props) {
     }
     props.dispatch(addTheImages(formData, config, id))
     // props.dispatch(fetchImages())
-    // props.dispatch(fetchPlants(auth0Id))
-    history.push('/')
+    history.push('/editPlant/' + id)
   }
+
+  const images = props.imageNames.filter((elem) => { return Number(elem.plantId) === Number(id) })
 
   return (
     <>
@@ -96,7 +121,7 @@ function EditPlant (props) {
         <button onClick={() => { history.push('/') }}>Home</button>
         <p ><strong>Edit Plant:</strong> </p>
         <label htmlFor='type'><strong>Type:</strong> <br />
-          <select name='type' id='type' defaultValue={type} onChange={handleChangeEditPlant}>
+          <select name='type' id='type' defaultValue={editForm.type} onChange={handleChangeEditPlant}>
             <option value='Vegetable'>Vegetable</option>
             <option value="Succulent">Succulent</option>
           </select>
@@ -111,13 +136,13 @@ function EditPlant (props) {
           />
         </label><br />
         <ul style={{ padding: '0px' }} >
-          {props.location.state.images.length === 0
-            ? <p><strong>Image:</strong> <br /> Please add a image. </p>
+          {images.length === 0
+            ? <p><strong>Image:</strong> <br /> Please add a image/images. </p>
             : <p><strong>Image:</strong> <br />
-              {props.location.state.images.map(imageObj => {
+              {images.map(imageObj => {
                 return (
                   <li key={imageObj.id}>
-                    <Image imageObj={imageObj}/>
+                    <EditImage imageObj={imageObj}/>
                   </li>
                 )
               })}
@@ -183,4 +208,12 @@ function EditPlant (props) {
   )
 }
 
-export default connect()(EditPlant)
+function mapStateToProps (globalState) {
+  return {
+    plants: globalState.plants,
+    imageNames: globalState.images,
+    user: globalState.user
+  }
+}
+
+export default connect(mapStateToProps)(EditPlant)

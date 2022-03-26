@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
     })
     .catch(err => {
       console.error(err)
-      res.status(500).json({ message: 'router: GETImages has error' })
+      res.status(500).json({ message: 'router: getImages has error' })
     })
 })
 
@@ -68,10 +68,10 @@ router.post('/upload-plant-pic/:id', (req, res) => {
         return null
       })
       .catch(err => {
-        res.status(500).send('server: add image has error', err.message)
+        res.status(500).send('router: addImages has error', err.message)
       })
 
-    // Add images by object
+    // Add images by single object
     // req.files.map(file => {
     //   db.addImages(id, file.filename)
     //     .then(() => {
@@ -83,4 +83,18 @@ router.post('/upload-plant-pic/:id', (req, res) => {
     //     })
     // })
   })
+})
+
+// Del api/v1/images/del/:id
+
+router.delete('/del/:id', (req, res) => {
+  const { id } = req.params
+  db.delImage(id)
+    .then(() => {
+      res.sendStatus(200)
+      return null
+    })
+    .catch(err => {
+      res.status(500).send('router: delImage has error', err.message)
+    })
 })

@@ -31,9 +31,10 @@ function Plant (props) {
   }
 
   function handleClickEditPlant () {
+    // const trimmedName = name.replace(/\s/g, '')
     history.push({
-      pathname: '/editPlant',
-      state: { plant: props.plant, images }
+      pathname: '/editPlant/' + id
+      // state: { plant: props.plant, images }
     })
   }
 

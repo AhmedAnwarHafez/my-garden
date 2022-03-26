@@ -1,4 +1,4 @@
-import { getImages, addImages } from '../apis/images'
+import { getImages, addImages, delImage } from '../apis/images'
 export const FETCH_IMAGES_SUCCESS = 'FETCH_IMAGES_SUCCESS'
 
 export function fetchImages () {
@@ -26,6 +26,17 @@ export function addTheImages (formData, config, id) {
         console.error('actions: getImages has error', err.message)
       })
   }
+}
+
+export function delTheImage (id) {
+  return delImage(id)
+    .then(() => {
+      console.log('actions: DelTheImage is successful')
+      return null
+    })
+    .catch(err => {
+      console.error('actions: DelTheImage has error', err.message)
+    })
 }
 
 export function fetchImagesSuccess (imageNames) {

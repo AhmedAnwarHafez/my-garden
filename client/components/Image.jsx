@@ -5,7 +5,6 @@ function Image (props) {
   return (
     <>
       <img src={`/images/uploads/${imageName}`} alt={props.imageName} style={{ width: '200px', height: 'auto' }} />
-      <button>X</button>
     </>
   )
 }
